@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Daily-Schedule</title>
+</head>
+<body>
+<h1>일일 미션 목록</h1>
+<table>
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Email</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="user : ${users}">
+        <td th:text="${user.id}"></td>
+        <td th:text="${user.name}"></td>
+        <td th:text="${user.email}"></td>
+    </tr>
+    </tbody>
+</table>
+
+<h2>Add New User</h2>
+<form th:action="@{/users}" method="post">
+    <input type="text" name="name" placeholder="Name"/>
+    <input type="email" name="email" placeholder="Email"/>
+    <button type="submit">Add User</button>
+</form>
+</body>
+</html>
