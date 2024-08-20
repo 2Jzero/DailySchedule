@@ -1,30 +1,39 @@
 package com.project.model;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 @Entity
 @Table(name = "daily_schedule")
-@Getter
+@Getter // Builder 이용하여 객체 생성
+@Builder // AllArgsConstructor, NoArgsConstructor 같이 이용해야 컴파일 에러 발생 안함
+@AllArgsConstructor
+@NoArgsConstructor
 @Setter
 public class DailyTO {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-
-    @Column(name = "ds_sq")
+    @Id // Primary Key
+    @GeneratedValue(strategy = GenerationType.IDENTITY) //AUTO_INCREMENT
+    @Column(name = "ds_sq") // 컬럼 정의
     private int sq;
 
+    // 일일 미션 번호
     @Column(name = "ds_no")
     private int number;
 
-    @Column(name = "ds_title")
+    // 일일 미션 제목(내용)
+    @Column(length = 100, name = "ds_title")
     private String title;
 
-    @Column(name = "ds_ox")
+    // 일일 미션 완료 여부
+    @Column(length = 100, name = "ds_ox")
     private String ox;
 
-    @Column(name = "ds_point")
+    // 일일 미션 사용자
+    @Column(length = 12, name = "ds_owner")
+    private String owner;
+
+    // 일일 미션 포인트
+    @Column(name = "ds_point", columnDefinition = "int default 20") // columnDefinition = 기본값
     private int point;
 }

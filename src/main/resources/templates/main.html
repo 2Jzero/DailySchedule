@@ -2,11 +2,16 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Schedule Management</title>
-    <!-- Add Bootstrap CSS for styling (optional) -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <script src="h`ttps://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <!-- jQuery 먼저 로드 -->
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <!-- Popper.js 로드 -->
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <!-- Bootstrap CSS 추가 -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- Bootstrap JavaScript 나중에 로드 -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</head>
+<body>
 </head>
 <body>
 <div class="container">
@@ -67,7 +72,6 @@
     </div>
 </div>
 
-<!-- JavaScript for handling the delete action (to be implemented) -->
 <script>
     function deleteMission(id) {
         if (confirm("Are you sure you want to delete this schedule?")) {
