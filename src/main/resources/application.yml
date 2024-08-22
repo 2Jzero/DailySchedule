@@ -7,6 +7,16 @@ spring:
     username: dailyschedule
     password: wnsdud12!
 
+  devtools:
+    remote:
+      restart:
+        enabled: true
+
+  thymeleaf:
+    cache: false
+    prefix: classpath:/templates/
+    suffix: .html
+
   jpa:
     hibernate:
       ddl-auto: update

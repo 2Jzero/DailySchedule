@@ -10,26 +10,25 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <!-- Bootstrap JavaScript 나중에 로드 -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+
 </head>
 <body>
 </head>
 <body>
 <div class="container">
-    <h1>Schedule Management</h1>
+    <h1>일일 미션 스케줄</h1>
 
     <!-- Schedule Table -->
     <table class="table table-striped">
         <thead>
         <tr>
-            <th>Schedule Description</th>
-            <th>Points</th>
-            <th>Actions</th>
+            <th>스케줄 내용  <button class="btn btn-info">완료</button></th>
         </tr>
         </thead>
         <tbody>
         <tr th:each="mission : ${missions}">
-            <td th:text="${mission.description}"></td>
-            <td th:text="${mission.points}"></td>
+            <td th:text="${mission.스케줄 내용}"></td>
             <td>
                 <!-- Add a button to trigger deletion -->
                 <button class="btn btn-danger" th:onclick="'deleteMission(' + ${mission.id} + ')'">Delete</button>
@@ -56,10 +55,6 @@
                         <div class="form-group">
                             <label for="description">Description</label>
                             <input type="text" class="form-control" id="description" name="description" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="points">Points</label>
-                            <input type="number" class="form-control" id="points" name="points" required>
                         </div>
                     </div>
                     <div class="modal-footer">

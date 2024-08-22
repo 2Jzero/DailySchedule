@@ -1,4 +1,4 @@
-package com.project.model;
+package com.project.jpa;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -10,7 +10,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Setter
-public class DailyTO {
+public class DailyJPA {
 
     @Id // Primary Key
     @GeneratedValue(strategy = GenerationType.IDENTITY) //AUTO_INCREMENT
@@ -26,7 +26,7 @@ public class DailyTO {
     private String title;
 
     // 일일 미션 완료 여부
-    @Column(length = 100, name = "ds_ox")
+    @Column(length = 100, name = "ds_ox", columnDefinition = "varchar(2) default 'x'")
     private String ox;
 
     // 일일 미션 사용자
