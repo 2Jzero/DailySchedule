@@ -1,0 +1,75 @@
+    <!DOCTYPE html>
+    <html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>Schedule Management</title>
+        <!-- jQuery 먼저 로드 -->
+        <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+        <!-- Popper.js 로드 -->
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+        <!-- Bootstrap CSS 추가 -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+        <!-- Bootstrap JavaScript 나중에 로드 -->
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    </head>
+    <body>
+    <div class="container">
+        <h1>일일 미션 스케줄</h1>
+
+        <!-- Schedule Table -->
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>스케줄 내용 <button class="btn btn-info">완료</button></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="mission : ${missions}">
+                <td th:text="${mission.스케줄 내용}"></td>
+                <td>
+                    <!-- Add a button to trigger deletion -->
+                    <button class="btn btn-danger" th:onclick="'deleteMission(' + ${mission.id} + ')'">Delete</button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+        <!-- Button to open the add modal -->
+        <button class="btn btn-primary" data-toggle="modal" data-target="#scheduleModal">스케줄 추가</button>
+
+        <!-- Add Schedule Modal -->
+        <div class="modal fade" id="scheduleModal" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="addModalLabel">스케줄 추가하기</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <form th:action="@{/addSchedule}" method="post">
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <label for="title">스케줄 내용</label>
+                                <input type="text" class="form-content" id="title" name="title" required> <!-- name이 Entity 필드와 일치해야함 -->
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
+                            <button type="submit" class="btn btn-primary">스케줄 추가</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function deleteMission(id) {
+            if (confirm("Are you sure you want to delete this schedule?")) {
+                window.location.href = '/deleteSchedule/' + id;
+            }
+        }
+    </script>
+    </body>
+    </html>
