@@ -9,10 +9,12 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
 
 @Controller
+@RequestMapping
 public class MainController {
 
     private final ScheduleService scheduleService;
@@ -20,6 +22,12 @@ public class MainController {
     @Autowired
     public MainController(ScheduleService scheduleService) {
         this.scheduleService = scheduleService;
+    }
+
+    @GetMapping("/index")
+    public String index() {
+
+        return "index";
     }
 
     @GetMapping("/dsmemo")
