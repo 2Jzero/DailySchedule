@@ -26,7 +26,7 @@ public class DailyJPA {
     private String title;
 
     // 일일 미션 완료 여부
-    @Column(length = 100, name = "ds_ox", columnDefinition = "varchar(2) default 'x'")
+    @Column(length = 100, name = "ds_ox", columnDefinition = "varchar(2) default 'X'")
     private String ox;
 
     // 일일 미션 사용자

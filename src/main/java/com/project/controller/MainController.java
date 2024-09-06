@@ -6,10 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -24,11 +21,6 @@ public class MainController {
         this.scheduleService = scheduleService;
     }
 
-    @GetMapping("/index")
-    public String index() {
-
-        return "index";
-    }
 
     @GetMapping("/dsmemo")
     public String mainpage(Model model) {
@@ -42,7 +34,7 @@ public class MainController {
 
 
     @PostMapping("/addSchedule")
-    public ResponseEntity<DailyJPA> addSchedule(@ModelAttribute DailyJPA dailyJPA) {
+    public ResponseEntity<DailyJPA> addSchedule(@RequestBody DailyJPA dailyJPA) {
 
         DailyJPA insertSchedule = scheduleService.insertSchedule(dailyJPA);
 
