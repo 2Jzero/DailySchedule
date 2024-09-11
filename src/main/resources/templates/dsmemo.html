@@ -19,7 +19,10 @@
         <table class="table table-striped">
             <thead>
             <tr>
-                <th>스케줄 내용 <button class="btn btn-info">완료</button></th>
+                <th>현재 일일 스케줄 점수 : <a id="totalPoint">0</a></th>
+            </tr>
+            <tr>
+                <th>스케줄 내용</th>
             </tr>
             </thead>
             <tbody>
@@ -27,7 +30,8 @@
                 <td th:text="${mission.title}"></td>
                 <td>
                     <!-- Add a button to trigger deletion -->
-                    <button class="btn btn-danger" th:onclick="'deleteMission(' + ${mission.sq} + ')'">Delete</button>
+                    <button class="btn btn-success" th:onclick="'successMission(' + ${mission.point} + ')'">완료</button>
+                    <button class="btn btn-danger" th:onclick="'deleteMission(' + ${mission.sq} + ')'">삭제</button>
                 </td>
             </tr>
             </tbody>
@@ -90,8 +94,40 @@
 
     <script>
         function deleteMission(sq) {
-            if (confirm("Are you sure you want to delete this schedule?")) {
-                window.location.href = '/deleteSchedule/' + id;
+            if (confirm("삭제하시겠습니까?")) {
+
+                  $.ajax({
+                    url: '/deleteSchedule',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(sq),
+                    success: function(response) {
+                              window.location.href = '/dsmemo';
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('스케줄 삭제 실패:', error);
+                    }
+                });
+            }
+        }
+    </script>
+
+    <script>
+        function successMission(point) {
+            if (confirm("미션을 완료하셨습니까??")) {
+
+                  $.ajax({
+                    url: '/successSchedule',
+                    type: 'POST',
+                    data: {point : point},
+                    success: function(response) {
+                              document.getElementById('totalPoint').textContent =+ point;
+                              window.location.href = '/dsmemo';
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('스케줄 삭제 실패:', error);
+                    }
+                });
             }
         }
     </script>

@@ -40,4 +40,12 @@ public class MainController {
 
         return ResponseEntity.ok(insertSchedule);
     }
+
+    @PostMapping("/deleteSchedule")
+    public ResponseEntity<Integer> deleteSchedule(@RequestBody int sq) {
+
+        int deleteSchedule = scheduleService.deleteSchedule(sq);
+
+        return ResponseEntity.ok(deleteSchedule);
+    }
 }
