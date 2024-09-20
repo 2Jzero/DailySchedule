@@ -19,7 +19,7 @@
         <table class="table table-striped">
             <thead>
             <tr>
-                <th>현재 일일 스케줄 점수 : <a id="totalPoint">0</a></th>
+                <th>현재 일일 스케줄 점수 : <a id="totalPoint" th:text="${userpoint}">0</a></th>
             </tr>
             <tr>
                 <th>스케줄 내용</th>
@@ -30,7 +30,7 @@
                 <td th:text="${mission.title}"></td>
                 <td>
                     <!-- Add a button to trigger deletion -->
-                    <button class="btn btn-success" th:onclick="'successMission(' + ${mission.point} + ')'">완료</button>
+                    <button class="btn btn-success" th:onclick="'successMission(this, ' + ${mission.point} + ')'">완료</button>
                     <button class="btn btn-danger" th:onclick="'deleteMission(' + ${mission.sq} + ')'">삭제</button>
                 </td>
             </tr>
@@ -113,7 +113,7 @@
     </script>
 
     <script>
-        function successMission(point) {
+        function successMission(button, point) {
             if (confirm("미션을 완료하셨습니까??")) {
 
                   $.ajax({
@@ -121,11 +121,10 @@
                     type: 'POST',
                     data: {point : point},
                     success: function(response) {
-                              document.getElementById('totalPoint').textContent =+ point;
-                              window.location.href = '/dsmemo';
+                              button.disabled = true;
                     },
                     error: function(xhr, status, error) {
-                        console.error('스케줄 삭제 실패:', error);
+                        console.error('스케줄 완료 실패:', error);
                     }
                 });
             }

@@ -1,6 +1,7 @@
 package com.project.controller;
 
 import com.project.jpa.DailyJPA;
+import com.project.jpa.UserJPA;
 import com.project.service.ScheduleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -39,6 +40,20 @@ public class MainController {
         DailyJPA insertSchedule = scheduleService.insertSchedule(dailyJPA);
 
         return ResponseEntity.ok(insertSchedule);
+    }
+
+    @PostMapping("/successSchedule")
+    public ResponseEntity<Integer> successSchedule(@RequestParam("point") int point) {
+
+        String userId = "pompom";
+
+        int currentPoint = scheduleService.userPoint(userId);
+
+        int totalPoint = currentPoint + point;
+
+        int updatePoint = scheduleService.updatePoint(userId, totalPoint);
+
+        return ResponseEntity.ok().build();
     }
 
     @PostMapping("/deleteSchedule")

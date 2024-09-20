@@ -1,5 +1,6 @@
 package com.project.jpa;
 
+import org.apache.catalina.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -24,4 +25,12 @@ public interface DailyScheduleJpa  extends JpaRepository<DailyJPA, Integer> {
     @Modifying
     @Query("delete from DailyJPA d where d.sq = :sq")
     public int deleteSchedule(@Param("sq") int sq);
+
+    // 사용자의 포인트 값 갱신
+    @Modifying
+    @Query("update UserJPA u set u.userPoint = :point where u.userId = :userId")
+    public int updatePoint(@Param("userId") String userId, @Param("point") int point);
+
+    @Query(value = "select user_point from user where user_id = :userId", nativeQuery = true)
+    public int userPoint(@Param("userId") String userId);
 }

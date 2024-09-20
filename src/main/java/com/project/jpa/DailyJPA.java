@@ -27,7 +27,7 @@ public class DailyJPA {
 
     // 일일 미션 완료 여부
     @Column(length = 100, name = "ds_ox", columnDefinition = "varchar(2) default 'X'")
-    private String ox;
+    private String ox = "X";
 
     // 일일 미션 사용자
     @Column(length = 12, name = "ds_owner")
@@ -35,5 +35,5 @@ public class DailyJPA {
 
     // 일일 미션 포인트
     @Column(name = "ds_point", columnDefinition = "int default 20") // columnDefinition = 기본값
-    private int point;
+    private int point = 20;
 }

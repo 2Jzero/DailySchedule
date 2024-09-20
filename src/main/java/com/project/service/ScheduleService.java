@@ -2,7 +2,9 @@ package com.project.service;
 
 import com.project.jpa.DailyJPA;
 import com.project.jpa.DailyScheduleJpa;
+import com.project.jpa.UserJPA;
 import jakarta.transaction.Transactional;
+import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -37,6 +39,17 @@ public class ScheduleService {
     public int deleteSchedule(int sq) {
 
         return dailyScheduleJpa.deleteSchedule(sq);
+    }
+
+    @Transactional
+    public int updatePoint(String userId, int point) {
+
+        return dailyScheduleJpa.updatePoint(userId, point);
+    }
+
+    public int userPoint(String userId) {
+
+        return dailyScheduleJpa.userPoint(userId);
     }
 
 }
