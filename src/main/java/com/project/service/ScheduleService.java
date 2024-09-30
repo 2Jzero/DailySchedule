@@ -2,6 +2,7 @@ package com.project.service;
 
 import com.project.jpa.DailyJPA;
 import com.project.jpa.DailyScheduleJpa;
+import com.project.jpa.UserInfo;
 import com.project.jpa.UserJPA;
 import jakarta.transaction.Transactional;
 import org.apache.catalina.User;
@@ -29,7 +30,7 @@ public class ScheduleService {
         String subOwner = "폼폼";
         dailyJPA.setOwner(subOwner);
 
-        int maxNumber = dailyScheduleJpa.findMaxNumber();
+        int maxNumber = dailyScheduleJpa.dailyJPAMaxNumber();
         dailyJPA.setNumber(maxNumber + 1);
 
         return dailyScheduleJpa.save(dailyJPA);
@@ -41,15 +42,5 @@ public class ScheduleService {
         return dailyScheduleJpa.deleteSchedule(sq);
     }
 
-    @Transactional
-    public int updatePoint(String userId, int point) {
-
-        return dailyScheduleJpa.updatePoint(userId, point);
-    }
-
-    public int userPoint(String userId) {
-
-        return dailyScheduleJpa.userPoint(userId);
-    }
 
 }

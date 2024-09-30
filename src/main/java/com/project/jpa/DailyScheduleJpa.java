@@ -19,18 +19,11 @@ public interface DailyScheduleJpa  extends JpaRepository<DailyJPA, Integer> {
 
     // number 필드의 최대값을 조회하는 커스텀 쿼리 메서드(JPQL 쿼리)
     @Query("select COALESCE(MAX(d.number), 0) from DailyJPA d")
-    public int findMaxNumber();
+    public int dailyJPAMaxNumber();
 
     // 해당 리스트 삭제구현
     @Modifying
     @Query("delete from DailyJPA d where d.sq = :sq")
     public int deleteSchedule(@Param("sq") int sq);
 
-    // 사용자의 포인트 값 갱신
-    @Modifying
-    @Query("update UserJPA u set u.userPoint = :point where u.userId = :userId")
-    public int updatePoint(@Param("userId") String userId, @Param("point") int point);
-
-    @Query(value = "select user_point from user where user_id = :userId", nativeQuery = true)
-    public int userPoint(@Param("userId") String userId);
 }
