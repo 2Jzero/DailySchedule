@@ -4,6 +4,9 @@ import com.project.jpa.DailyJPA;
 import com.project.jpa.UserJPA;
 import com.project.service.ScheduleService;
 import com.project.service.UserService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
+import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -28,17 +31,20 @@ public class MainController {
 
 
     @GetMapping("/dsmemo")
-    public String mainpage(Model model) {
+    public String mainpage(Model model, HttpSession session) {
 
         // 모델에 데이터 추가 (예: List<DailyJPA> missions)
         List<DailyJPA> dailyList = scheduleService.dailyList();
 
-        String userId = "pompom";
+        String idSession = (String) session.getAttribute("loginId");
+
+        String userId = idSession;
 
         int userPoint = userService.userPoint(userId);
 
         model.addAttribute("dailyList", dailyList);
         model.addAttribute("userPoint", userPoint);
+        model.addAttribute("idSession", idSession);
 
         return "dsmemo";
     }
@@ -53,9 +59,11 @@ public class MainController {
     }
 
     @PostMapping("/successSchedule")
-    public ResponseEntity<Integer> successSchedule(@RequestParam("point") int point) {
+    public ResponseEntity<Integer> successSchedule(@RequestParam("point") int point, HttpSession session) {
 
-        String userId = "pompom";
+        String idSession = (String) session.getAttribute("loginId");
+
+        String userId = idSession;
 
         // 미션 점수를 내 계정 점수에 적립하는 코드
         int currentPoint = userService.userPoint(userId);
@@ -77,11 +85,30 @@ public class MainController {
         return ResponseEntity.ok(deleteSchedule);
     }
 
+    // 회원가입
     @PostMapping("/sign")
     public ResponseEntity<UserJPA> sign(@RequestBody UserJPA userJPA) {
 
         UserJPA signUser = userService.sign(userJPA);
 
         return ResponseEntity.ok(signUser);
+    }
+
+    // 로그인
+    @PostMapping("/login")
+    public ResponseEntity<UserJPA> login(@RequestBody UserJPA userJPA, HttpServletRequest request, HttpSession session) {
+
+        System.out.println(userJPA.getUserId());
+
+        UserJPA loginFlag = userService.login(userJPA.getUserId(), userJPA.getUserPw());
+
+        if(loginFlag != null) {
+            session = request.getSession();
+
+            session.setAttribute("loginId", userJPA.getUserId());
+            session.setAttribute("userPoint", userJPA.getUserPoint());
+        }
+
+        return ResponseEntity.ok(loginFlag);
     }
 }

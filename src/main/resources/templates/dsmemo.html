@@ -212,13 +212,13 @@
         $(document).ready(function() {
             $('#sfrm').on('submit', function(event) {
 
-            let signId = $('#signId').val(); // 아이디 가져오기
-            let signPw = $('#signPw').val(); // 비밀번호 가져오기
+                let signId = $('#signId').val(); // 아이디 가져오기
+                let signPw = $('#signPw').val(); // 비밀번호 가져오기
 
-            let userData = {
-                userId: signId,
-                userPw: signPw
-            };
+                let userData = {
+                    userId: signId,
+                    userPw: signPw
+                };
 
                   $.ajax({
                     url: '/sign',
@@ -235,6 +235,38 @@
                 });
             });
         });
+    </script>
+
+
+    <script>
+        $(document).ready(function() {
+            $('#lfrm').on('submit', function(event) {
+
+                let userId = $('#userId').val(); // 아이디 가져오기
+                let userPw = $('#userPw').val(); // 비밀번호 가져오기
+
+                let userData = {
+                    userId: userId,
+                    userPw: userPw
+                };
+
+                    $.ajax({
+                        url: '/login',
+                        type: 'POST',
+                        contentType: 'application/json',
+                        data: JSON.stringify(userData),
+                        success: function(response) {
+                            alert('로그인 완료! 환영합니다.');
+                            window.location.href = '/dsmemo';
+                        },
+                        error: function(xhr, status, error) {
+                            console.error('회원가입 실패:', error);
+                        }
+                    });
+            });
+        });
+
+
     </script>
 
 

@@ -23,4 +23,8 @@ public interface UserInfo  extends JpaRepository<UserJPA, Integer> {
     // userJPA userNum 필드의 최대값을 조회하는 커스텀 쿼리 메서드(JPQL 쿼리)
     @Query("select COALESCE(MAX(u.userNum), 0) from UserJPA u")
     public int userJPAMaxNumber();
+
+    // 유저 로그인
+    @Query("select u from UserJPA u where u.userId = :userId")
+    public UserJPA login(@Param("userId") String userId);
 }
