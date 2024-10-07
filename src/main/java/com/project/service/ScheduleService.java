@@ -21,14 +21,15 @@ public class ScheduleService {
         this.dailyScheduleJpa = dailyScheduleJpa;
     }
 
-    public List<DailyJPA> dailyList() {
-        return dailyScheduleJpa.dailyList();
+    public List<DailyJPA> dailyList(String userId) {
+        return dailyScheduleJpa.dailyList(userId);
     }
 
-    public DailyJPA insertSchedule(DailyJPA dailyJPA) {
+    @Transactional
+    public DailyJPA insertSchedule(String userId, DailyJPA dailyJPA) {
 
-        String subOwner = "폼폼";
-        dailyJPA.setOwner(subOwner);
+        String dsOwner = userId;
+        dailyJPA.setOwner(dsOwner);
 
         int maxNumber = dailyScheduleJpa.dailyJPAMaxNumber();
         dailyJPA.setNumber(maxNumber + 1);

@@ -14,8 +14,8 @@ import java.util.List;
 public interface DailyScheduleJpa  extends JpaRepository<DailyJPA, Integer> {
 
     // db의 스케줄 리스트 화면에 보여줌
-    @Query(value = "select ds_sq, ds_no, ds_title, ds_ox, ds_owner, ds_point from daily_schedule",  nativeQuery = true)
-    public List<DailyJPA> dailyList();
+    @Query(value = "select ds_sq, ds_no, ds_title, ds_ox, ds_owner, ds_point from daily_schedule where ds_owner = :userId",  nativeQuery = true)
+    public List<DailyJPA> dailyList(@Param("userId") String userId);
 
     // number 필드의 최대값을 조회하는 커스텀 쿼리 메서드(JPQL 쿼리)
     @Query("select COALESCE(MAX(d.number), 0) from DailyJPA d")

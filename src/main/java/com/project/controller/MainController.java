@@ -33,27 +33,45 @@ public class MainController {
     @GetMapping("/dsmemo")
     public String mainpage(Model model, HttpSession session) {
 
-        // 모델에 데이터 추가 (예: List<DailyJPA> missions)
-        List<DailyJPA> dailyList = scheduleService.dailyList();
-
         String idSession = (String) session.getAttribute("loginId");
 
-        String userId = idSession;
+        if (idSession != null) {
 
-        int userPoint = userService.userPoint(userId);
+            String userId = idSession;
 
-        model.addAttribute("dailyList", dailyList);
-        model.addAttribute("userPoint", userPoint);
-        model.addAttribute("idSession", idSession);
+            // userId가 null이 아닐 떄만 로그인 한 아이디의 리스트를 추가 (예: List<DailyJPA> missions)
+            List<DailyJPA> dailyList = scheduleService.dailyList(userId);
+
+            // userId가 null이 아닐 때만 userPoint 메서드 호출
+            int userPoint = userService.userPoint(userId);
+
+            model.addAttribute("dailyList", dailyList);
+            model.addAttribute("userPoint", userPoint);
+            model.addAttribute("idSession", idSession);
+
+        } else {
+            // 로그인되지 않았을 때 0
+            model.addAttribute("userPoint", 0);  // 기본 포인트 값을 0으로 설정
+        }
 
         return "dsmemo";
     }
 
 
     @PostMapping("/addSchedule")
-    public ResponseEntity<DailyJPA> addSchedule(@RequestBody DailyJPA dailyJPA) {
+    public ResponseEntity<DailyJPA> addSchedule(@RequestBody DailyJPA dailyJPA, HttpSession session) {
 
-        DailyJPA insertSchedule = scheduleService.insertSchedule(dailyJPA);
+        String idSession = (String) session.getAttribute("loginId");
+
+        DailyJPA insertSchedule = new DailyJPA();
+
+        // 로그인 한 상태일 떄만 스케줄 추가 가능, 각 유저 당 스케줄 구분
+        if(idSession != null) {
+            String userId = idSession;
+
+            insertSchedule = scheduleService.insertSchedule(userId, dailyJPA);
+
+        }
 
         return ResponseEntity.ok(insertSchedule);
     }
@@ -110,5 +128,13 @@ public class MainController {
         }
 
         return ResponseEntity.ok(loginFlag);
+    }
+
+    // 로그아웃, 단순히 상태를 변경하는 것이기 때문에 GetMapping
+    @GetMapping("/logout")
+    public String logout(HttpSession session) {
+        session.invalidate();
+
+        return "redirect:/dsmemo";
     }
 }

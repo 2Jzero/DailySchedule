@@ -20,7 +20,10 @@
 <div class="container">
     <div class="header">
         <h1>일일 미션 스케줄</h1>
-        <button class="btn btn-primary" data-toggle="modal" data-target="#loginModal">로그인</button>
+        <!-- 세션이 없을 때: 로그인 버튼 -->
+        <button th:if="${idSession == null or idSession == ''}" class="btn btn-primary" data-toggle="modal" data-target="#loginModal">로그인</button>
+        <!-- 세션이 있을 때: 로그아웃 버튼 -->
+        <button th:if="${idSession != null and idSession != ''}" class="btn btn-danger" onclick="location.href='/logout'">로그아웃</button>
     </div>
     <!-- Schedule Table -->
     <table class="table table-striped">
@@ -241,6 +244,8 @@
     <script>
         $(document).ready(function() {
             $('#lfrm').on('submit', function(event) {
+
+                event.preventDefault(); // 기본 제출 동작 방지
 
                 let userId = $('#userId').val(); // 아이디 가져오기
                 let userPw = $('#userPw').val(); // 비밀번호 가져오기
