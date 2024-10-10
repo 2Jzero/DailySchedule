@@ -43,5 +43,11 @@ public class ScheduleService {
         return dailyScheduleJpa.deleteSchedule(sq);
     }
 
+    @Transactional
+    public int successMission(String userId, int sq) {
+
+        return dailyScheduleJpa.successMission(userId, sq);
+    }
+
 
 }

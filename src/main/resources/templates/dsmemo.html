@@ -37,10 +37,13 @@
         </thead>
         <tbody>
         <tr th:each="mission : ${dailyList}">
-            <td th:text="${mission.title}"></td>
+            <td th:text="${mission.title}" id="mission-title"></td>
             <td>
-                <!-- Add a button to trigger deletion -->
-                <button class="btn btn-success" th:onclick="'successMission(this, ' + ${mission.point} + ')'">완료
+                <!-- ox 값을 가져오기 위해 히든으로 추가 -->
+                <input type="hidden" th:value="${mission.ox}" class="mission-ox"/>
+
+                <!-- onclick = 함수(파라미터) 밑에 ajax나 js 사용시에 파라미터를 사용 가능, 버틀 활성화나 스타일 변경 위해 this 넣음 -->
+                <button id="success-button" class="btn btn-success" th:onclick="'successMission(this, ' + ${mission.point} + ', ' + ${mission.sq} + ')'">완료</button>
                 </button>
                 <button class="btn btn-danger" th:onclick="'deleteMission(' + ${mission.sq} + ')'">삭제</button>
             </td>
@@ -143,6 +146,18 @@
         </div>
     </div>
 
+    <!-- 미션 완료 항목 리스트들을 구분하기 쉽고 버튼 활성화를 방지하기 위해 표시-->
+    <script>
+        $(document).ready(function() {
+            $('.mission-ox').each(function() {
+                const oxVal = $(this).val();
+                if(oxVal === 'O') {
+                    $(this).closest('tr').find('#success-button').prop('disabled', true);
+                    $(this).closest('tr').find('#mission-title').css('color', 'gray');
+                }
+            });
+        });
+    </script>
 
     <script>
         $(document).ready(function() {
@@ -190,21 +205,24 @@
     </script>
 
     <script>
-        function successMission(button, point) {
+        function successMission(button, point, sq) {
             if (confirm("미션을 완료하셨습니까??")) {
 
                   $.ajax({
                     url: '/successSchedule',
                     type: 'POST',
-                    data: {point : point},
+                    data: {point : point,
+                           sq : sq},
                     success: function(response) {
                               alert("완료!");
-                              button.disabled = true;
                               window.location.href = '/dsmemo';
 
                     },
                     error: function(xhr, status, error) {
+                        alert('스케줄 완료에 실패했습니다.');
                         console.error('스케줄 완료 실패:', error);
+                        console.log('point:', point, 'sq:', sq);
+
                     }
                 });
             }
@@ -214,6 +232,9 @@
     <script>
         $(document).ready(function() {
             $('#sfrm').on('submit', function(event) {
+
+                event.preventDefault(); // 기본 제출 동작 방지
+
 
                 let signId = $('#signId').val(); // 아이디 가져오기
                 let signPw = $('#signPw').val(); // 비밀번호 가져오기

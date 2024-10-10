@@ -77,7 +77,7 @@ public class MainController {
     }
 
     @PostMapping("/successSchedule")
-    public ResponseEntity<Integer> successSchedule(@RequestParam("point") int point, HttpSession session) {
+    public ResponseEntity<Integer> successSchedule(@RequestParam("point") int point, @RequestParam("sq") int sq, HttpSession session) {
 
         String idSession = (String) session.getAttribute("loginId");
 
@@ -88,9 +88,11 @@ public class MainController {
 
         int totalPoint = currentPoint + point;
 
+        // userId에 따라 포인트를 적립
         int updatePoint = userService.updatePoint(userId, totalPoint);
 
-        // ds_ox를 o로 바꿔서 완료되었음을 나타냄
+        // userId에 따라 미션 완료 유무를 x -> o로 바꾸는 메서드 호출
+        int successMission = scheduleService.successMission(userId, sq);
 
         return ResponseEntity.ok().build();
     }
