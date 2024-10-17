@@ -48,6 +48,8 @@ public class ScheduleService {
 
         return dailyScheduleJpa.successMission(userId, sq);
     }
+    
+    // 실행시, 디비 이벤트 스케줄러 실행 확인하는 메서드
 
 
 }
