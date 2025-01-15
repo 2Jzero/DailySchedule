@@ -29,14 +29,15 @@
     <table class="table table-striped">
         <thead>
         <tr>
-            <th>현재 일일 스케줄 점수 : <a id="totalPoint" th:text="${userPoint}">0</a></th>
+            <!-- a태그는 value 지원x, date-* 속성 사용하여 .data로 값 가져오기-->
+            <th>현재 일일 스케줄 점수 : <a id="totalPoint" th:data-point="${userPoint}" th:text="${userPoint}"></a></th>
         </tr>
         <tr>
             <th>스케줄 내용</th>
         </tr>
         </thead>
         <tbody>
-        <tr th:each="mission : ${dailyList}">
+        <tr th:each="mission : ${dailyList}"> <!-- model.addAttribute로 가져온 값 바로 사용 가능 -->
             <td th:text="${mission.title}" id="mission-title"></td>
             <td>
                 <!-- ox 값을 가져오기 위해 히든으로 추가 -->
@@ -45,14 +46,14 @@
                 <!-- onclick = 함수(파라미터) 밑에 ajax나 js 사용시에 파라미터를 사용 가능, 버틀 활성화나 스타일 변경 위해 this 넣음 -->
                 <button id="success-button" class="btn btn-success" th:onclick="'successMission(this, ' + ${mission.point} + ', ' + ${mission.sq} + ')'">완료</button>
                 </button>
-                <button class="btn btn-danger" th:onclick="'deleteMission(' + ${mission.sq} + ')'">삭제</button>
+                <button id="delete-button" class="btn btn-danger" th:onclick="'deleteMission(' + ${mission.sq} + ')'">삭제</button>
             </td>
         </tr>
         </tbody>
     </table>
 
     <!-- Button to open the add modal -->
-    <button class="btn btn-primary" data-toggle="modal" data-target="#scheduleModal">스케줄 추가</button>
+    <button id="addModal" class="btn btn-primary" data-toggle="modal" data-target="#scheduleModal">스케줄 추가</button>
 
     <!-- Add Schedule Modal -->
     <div class="modal fade" id="scheduleModal" tabindex="-1" role="dialog"> <!-- fade : 애니메이션 효과, role : 역할 명시 -->
@@ -73,7 +74,7 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="submit" class="btn btn-primary">스케줄 추가</button>
+                        <button type="submit" id="add-button" class="btn btn-primary">스케줄 추가</button>
                     </div>
                 </form>
             </div>
@@ -146,19 +147,37 @@
         </div>
     </div>
 
-    <!-- 미션 완료 항목 리스트들을 구분하기 쉽고 버튼 활성화를 방지하기 위해 표시-->
+    <!-- 미션 완료 항목 리스트들을 구분하기 쉽고 버튼 활성화를 방지하기 위해 표시 / 스케줄 100p일 시 하루치 할당량 완료 및 스케줄 추가 방지-->
     <script>
         $(document).ready(function() {
+            modifiedContext();
+            disabledModal();
+        });
+
+        function modifiedContext() {
             $('.mission-ox').each(function() {
                 const oxVal = $(this).val();
-                if(oxVal === 'O') {
+                if (oxVal === 'O') {
                     $(this).closest('tr').find('#success-button').prop('disabled', true);
                     $(this).closest('tr').find('#mission-title').css('color', 'blue');
+                    $(this).closest('tr').find('#delete-button').prop('disabled', true);
                 }
             });
-        });
+        }
+
+        function disabledModal() {
+            $('#totalPoint').each(function() {
+                let totalPoint = Number($(this).data('point'));
+                console.log(totalPoint);
+                if (totalPoint == 100) {
+                    $('#addModal').text('미션완료');
+                    $('#addModal').prop('disabled', true);
+                }
+            });
+        }
     </script>
 
+    <!-- 스케줄 추가하여 DB 적재 로직 -->
     <script>
         $(document).ready(function() {
             $('#afrm').on('submit', function(event) {
@@ -169,7 +188,7 @@
                   };
 
                   $.ajax({
-                    url: '/addSchedule',
+                    url: '/schedule/add',
                     type: 'POST',
                     contentType: 'application/json',
                     data: JSON.stringify(scheduleInput),
@@ -184,13 +203,14 @@
         });
     </script>
 
+    <!-- 스케줄 삭제 로직-->
     <script>
         function deleteMission(sq) {
             if (confirm("삭제하시겠습니까?")) {
 
                   $.ajax({
-                    url: '/deleteSchedule',
-                    type: 'POST',
+                    url: '/schedule/del',
+                    type: 'Delete',
                     contentType: 'application/json',
                     data: JSON.stringify(sq),
                     success: function(response) {
@@ -204,12 +224,13 @@
         }
     </script>
 
+    <!-- 미션 성공 버튼 누를 시 -->
     <script>
         function successMission(button, point, sq) {
             if (confirm("미션을 완료하셨습니까??")) {
 
                   $.ajax({
-                    url: '/successSchedule',
+                    url: '/schedule/suc',
                     type: 'POST',
                     data: {point : point,
                            sq : sq},
@@ -229,6 +250,7 @@
         }
     </script>
 
+    <!-- 회원가입 -->
     <script>
         $(document).ready(function() {
             $('#sfrm').on('submit', function(event) {
@@ -261,7 +283,7 @@
         });
     </script>
 
-
+    <!-- 로그인 -->
     <script>
         $(document).ready(function() {
             $('#lfrm').on('submit', function(event) {
@@ -286,7 +308,7 @@
                             window.location.href = '/dsmemo';
                         },
                         error: function(xhr, status, error) {
-                            console.error('회원가입 실패:', error);
+                            alert('로그인 실패! 다시 시도해주세요.');
                         }
                     });
             });

@@ -58,7 +58,7 @@ public class MainController {
     }
 
 
-    @PostMapping("/addSchedule")
+    @PostMapping("/schedule/add")
     public ResponseEntity<DailyJPA> addSchedule(@RequestBody DailyJPA dailyJPA, HttpSession session) {
 
         String idSession = (String) session.getAttribute("loginId");
@@ -76,7 +76,7 @@ public class MainController {
         return ResponseEntity.ok(insertSchedule);
     }
 
-    @PostMapping("/successSchedule")
+    @PostMapping("/schedule/suc")
     public ResponseEntity<Integer> successSchedule(@RequestParam("point") int point, @RequestParam("sq") int sq, HttpSession session) {
 
         String idSession = (String) session.getAttribute("loginId");
@@ -97,7 +97,7 @@ public class MainController {
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping("/deleteSchedule")
+    @DeleteMapping("/schedule/del")
     public ResponseEntity<Integer> deleteSchedule(@RequestBody int sq) {
 
         int deleteSchedule = scheduleService.deleteSchedule(sq);
@@ -117,8 +117,6 @@ public class MainController {
     // 로그인
     @PostMapping("/login")
     public ResponseEntity<UserJPA> login(@RequestBody UserJPA userJPA, HttpServletRequest request, HttpSession session) {
-
-        System.out.println(userJPA.getUserId());
 
         UserJPA loginFlag = userService.login(userJPA.getUserId(), userJPA.getUserPw());
 

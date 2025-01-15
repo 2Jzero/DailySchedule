@@ -7,8 +7,8 @@ import lombok.*;
 @Table(name = "daily_schedule")
 @Getter // Builder 이용하여 객체 생성
 @Builder // AllArgsConstructor, NoArgsConstructor 같이 이용해야 컴파일 에러 발생 안함
-@AllArgsConstructor
-@NoArgsConstructor
+@AllArgsConstructor // 모든 필드 파라미터로 받는 생성자 자동 생성
+@NoArgsConstructor // 인자 없는 기본 생성자 자동 생성
 @Setter
 public class DailyJPA {
 
